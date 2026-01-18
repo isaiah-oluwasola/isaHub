@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IsaHub - Real-Time Chat with AI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="website icon" href="assets/logo.png">
+</head>
+<body class="light-mode">
+    <!-- Theme Toggle Button -->
+    <div class="theme-toggle" id="theme-toggle">
+        <i class="fas fa-moon" id="theme-icon"></i>
+    </div>
+
+    <!-- Welcome Screen -->
+    <div id="welcome-screen" class="screen active">
+        <div class="welcome-container">
+            <div class="theme-toggle-welcome">
+                <i class="fas fa-moon" id="theme-toggle-icon"></i>
+            </div>
+            <div class="logo">
+                <img src="assets/logo.png" alt="Logo" style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 1rem;">
+                <h1>IsaHub</h1>
+            </div>
+            <p>Connect with people nearby, chat with AI, and make new friends</p>
+            <div class="auth-buttons">
+                <button id="signup-btn" class="auth-btn btn-primary">Sign Up</button>
+                <button id="login-btn" class="auth-btn btn-secondary">Log In</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sign Up Screen -->
+    <div id="signup-screen" class="screen">
+        <div class="auth-container">
+            <div class="auth-header">
+                <img src="assets/logo.png" alt="Logo" style="width: 60px; height: 60px; object-fit: contain; margin: 0 auto 1rem; display: block;">
+                <h2>Create Account</h2>
+                <p>Join today</p>
+            </div>
+            
+            <!-- Profile Picture Upload -->
+            <div class="profile-picture-upload">
+                <div class="profile-image-preview" id="profile-image-preview">
+                    <i class="fas fa-user"></i>
+                    <div class="upload-overlay">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                </div>
+                <input type="file" id="profile-image-input" accept="image/*" style="display: none;">
+                <button class="btn-upload" id="upload-profile-btn">Upload Photo</button>
+            </div>
+            
+            <form id="signup-form">
+                <div class="input-group">
+                    <input type="text" id="signup-name" placeholder="Full Name" required>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="signup-username" placeholder="Username" required>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="signup-email" placeholder="Email Address" required>
+                </div>
+                <div class="input-group">
+                    <input type="tel" id="signup-phone" placeholder="Phone Number (Optional)">
+                </div>
+                <div class="input-group">
+                    <input type="password" id="signup-password" placeholder="Password" required minlength="6">
+                    <div class="password-strength">
+                        <div class="password-strength-bar" id="password-strength-bar"></div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="signup-confirm-password" placeholder="Confirm Password" required>
+                </div>
+                <div class="terms-checkbox">
+                    <input type="checkbox" id="terms-agree" required>
+                    <label for="terms-agree">I agree to the <a href="#" class="terms-link">Terms of Service</a> and <a href="#" class="terms-link">Privacy Policy</a></label>
+                </div>
+                <button type="submit" class="btn-primary" id="signup-submit-btn">Create Account</button>
+            </form>
+            <div class="auth-footer">
+                <p>Already have an account? <span class="auth-switch" id="switch-to-login">Log In</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen">
+        <div class="auth-container">
+            <div class="auth-header">
+                <img src="assets/logo.png" alt="Logo" style="width: 60px; height: 60px; object-fit: contain; margin: 0 auto 1rem; display: block;">
+                <h2>Welcome Back</h2>
+                <p>Sign in to your account</p>
+            </div>
+            <form id="login-form">
+                <div class="input-group">
+                    <input type="email" id="login-email" placeholder="Email Address" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="login-password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn-primary" id="login-submit-btn">Sign In</button>
+            </form>
+            <div class="auth-footer">
+                <p>Don't have an account? <span class="auth-switch" id="switch-to-signup">Sign Up</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Screen -->
+    <div id="main-app-screen" class="screen">
+        <!-- App Header -->
+        <div class="app-header">
+            <div class="header-left">
+                <img src="assets/logo.png" alt="Logo" style="width: 30px; height: 30px; object-fit: contain; vertical-align: middle; margin-right: 10px;">
+                <span>IsaHub</span>
+                <span class="ai-chat-indicator" id="ai-indicator" style="display: none;">AI Enabled</span>
+            </div>
+            <div class="header-right">
+                <i class="fas fa-search" style="margin-right: 1rem; cursor: pointer;" id="search-btn"></i>
+                <i class="fas fa-ellipsis-v" style="cursor: pointer;" id="menu-btn"></i>
+            </div>
+        </div>
+
+        <!-- Contact Developer Modal -->
+        <div class="contact-developer-modal" id="contact-developer-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); z-index: 2000; align-items: center; justify-content: center;">
+            <div class="contact-developer-content" style="background: var(--surface-color); border-radius: 15px; padding: 2rem; max-width: 400px; width: 90%; position: relative;">
+                <button class="close-modal" id="close-contact-developer" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer;">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="contact-header" style="text-align: center; margin-bottom: 1.5rem;">
+                    <h3 style="color: var(--text-primary); margin-bottom: 0.5rem;">Contact Developer</h3>
+                    <p style="color: var(--text-secondary);">For any issues or inquiries</p>
+                </div>
+                <div class="contact-info" style="margin-bottom: 1.5rem;">
+                    <p style="color: var(--text-primary); margin-bottom: 1rem;">Note: If you want to contact developer for any issues contact us on:</p>
+                    <div class="contact-buttons" style="display: flex; flex-direction: column; gap: 1rem;">
+                        <button class="contact-btn whatsapp-btn" id="whatsapp-btn" style="background: #25D366; color: white; border: none; padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: 1rem; transition: all 0.3s;">
+                            <i class="fab fa-whatsapp"></i> WhatsApp: 08034617218
+                        </button>
+                        <button class="contact-btn email-btn" id="email-btn" style="background: var(--primary-color); color: white; border: none; padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: 1rem; transition: all 0.3s;">
+                            <i class="fas fa-envelope"></i> Email: tunixcompanyyoung@gmail.com
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Viewer Modal -->
+        <div class="profile-viewer-modal" id="profile-viewer-modal">
+            <div class="profile-viewer-content">
+                <button class="close-modal" id="close-profile-viewer">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="profile-viewer-image" id="viewer-profile-image">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="profile-viewer-name" id="viewer-profile-name">User Name</div>
+                <div class="profile-viewer-email" id="viewer-profile-email">user@example.com</div>
+                <div class="profile-viewer-status" id="viewer-profile-status">Online</div>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <button class="btn-primary" id="message-profile-btn">Message</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Profile Modal -->
+        <div class="edit-profile-modal" id="edit-profile-modal">
+            <div class="edit-profile-content">
+                <button class="close-modal" id="close-edit-profile">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="edit-profile-header">
+                    <h3>Edit Profile</h3>
+                    <p>Update your personal information</p>
+                </div>
+                
+                <div class="edit-profile-tabs">
+                    <button class="edit-profile-tab active" data-tab="basic">Basic Info</button>
+                    <button class="edit-profile-tab" data-tab="security">Security</button>
+                    <button class="edit-profile-tab" data-tab="avatar">Profile Picture</button>
+                </div>
+                
+                <!-- Basic Info Tab -->
+                <div class="edit-profile-section active" id="basic-tab">
+                    <div class="form-group">
+                        <label for="edit-name">Full Name</label>
+                        <input type="text" id="edit-name" placeholder="Enter your name">
+                        <div class="update-frequency">You can change this once per month</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-username">Username</label>
+                        <input type="text" id="edit-username" placeholder="Enter username">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-phone">Phone Number</label>
+                        <input type="tel" id="edit-phone" placeholder="Enter phone number">
+                    </div>
+                    <button class="btn-primary" id="save-basic-info">Save Changes</button>
+                </div>
+                
+                <!-- Security Tab -->
+                <div class="edit-profile-section" id="security-tab">
+                    <div class="form-group">
+                        <label for="edit-email">Email Address</label>
+                        <input type="email" id="edit-email" placeholder="Enter new email">
+                        <small style="color: var(--warning-color);">Verification email will be sent after change</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="current-password">Current Password</label>
+                        <input type="password" id="current-password" placeholder="Enter current password">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password">New Password</label>
+                        <input type="password" id="new-password" placeholder="Enter new password">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm New Password</label>
+                        <input type="password" id="confirm-password" placeholder="Confirm new password">
+                    </div>
+                    <button class="btn-primary" id="save-security-info">Update Security</button>
+                </div>
+                
+                <!-- Avatar Tab -->
+                <div class="edit-profile-section" id="avatar-tab">
+                    <div class="avatar-preview-container">
+                        <div class="avatar-preview-large" id="avatar-edit-preview">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="avatar-actions">
+                            <button class="btn-upload" id="edit-avatar-btn">Change Photo</button>
+                            <button class="btn-outline" id="remove-avatar-btn">Remove Photo</button>
+                        </div>
+                        <input type="file" id="edit-avatar-input" accept="image/*" style="display: none;">
+                    </div>
+                    <p style="text-align: center; color: var(--text-secondary);">
+                        Upload a clear photo of yourself for better recognition
+                    </p>
+                    <button class="btn-primary" id="save-avatar">Save Photo</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- App Views -->
+        <div class="app-views">
+            <!-- Chats List View -->
+            <div id="chats-view" class="app-view active">
+                <div class="chats-list" id="chats-list">
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading chats...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Chat View -->
+            <div id="ai-chat-view" class="app-view">
+                <div class="chat-header-detailed">
+                    <div class="back-button" id="back-to-chats-ai">
+                        <i class="fas fa-arrow-left"></i>
+                    </div>
+                    <div class="chat-avatar" style="background: var(--secondary-color);">
+                        <i class="fas fa-robot"></i>
+                        <div class="online-indicator" style="display: block; background: var(--success-color);"></div>
+                    </div>
+                    <div class="chat-user-info">
+                        <div class="chat-with-name">IsaGPT AI Assistant</div>
+                        <div class="status-online">Always online</div>
+                    </div>
+                </div>
+                <div class="chat-messages" id="ai-chat-messages">
+                    <div class="message received">
+                        <div class="message-content">
+                            👋 Hello! I'm IsaGPT, your AI assistant. I can help you with:
+                            <br>• Answering questions
+                            <br>• Writing content
+                            <br>• Problem solving
+                            <br>• Learning new things
+                            <br><br>What would you like to know today?
+                        </div>
+                        <div class="message-time">Just now</div>
+                    </div>
+                </div>
+                <div class="chat-input-container">
+                    <input type="text" class="chat-input" id="ai-message-input" placeholder="Ask IsaGPT anything...">
+                    <button class="send-btn" id="send-ai-message" style="background: var(--secondary-color);">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Add Friends View -->
+            <div id="add-friends-view" class="app-view">
+                <div class="add-friends-view">
+                    <div class="search-container">
+                        <input type="text" class="search-input" id="friend-search" placeholder="Search by email or phone number...">
+                    </div>
+                    <div class="search-options">
+                        <button class="search-option-btn active" data-type="email">Search by Email</button>
+                        <button class="search-option-btn" data-type="phone">Search by Phone</button>
+                    </div>
+                    <div class="users-list" id="users-list">
+                        <div class="empty-state">
+                            <i class="fas fa-search"></i>
+                            <h3>Find Friends</h3>
+                            <p>Search for friends using their email address or phone number</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Screen -->
+            <div id="chat-view" class="app-view">
+                <div class="chat-header-detailed">
+                    <div class="back-button" id="back-to-chats">
+                        <i class="fas fa-arrow-left"></i>
+                    </div>
+                    <div class="chat-avatar" id="chat-avatar-container" style="cursor: pointer;">
+                        <span id="chat-avatar-text">U</span>
+                        <div class="online-indicator" id="chat-online-indicator" style="display: none;"></div>
+                    </div>
+                    <div class="chat-user-info" style="cursor: pointer;" id="chat-user-info">
+                        <div class="chat-with-name" id="chat-with-name">Loading...</div>
+                        <div class="status-online" id="chat-status">online</div>
+                    </div>
+                </div>
+                <div class="chat-messages" id="chat-messages">
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading messages...</p>
+                    </div>
+                </div>
+                <div class="chat-input-container">
+                    <input type="text" class="chat-input" id="message-input" placeholder="Type a message...">
+                    <button class="send-btn" id="send-message">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Settings View -->
+            <div id="settings-view" class="app-view">
+                <div class="settings-list">
+                    <div class="setting-item" id="edit-profile">
+                        <span>Edit Profile</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    <div class="setting-item" id="ai-settings">
+                        <span>AI Assistant Settings</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    <div class="setting-item">
+                        <span>Privacy</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    <div class="setting-item">
+                        <span>Notifications</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    <div class="setting-item" id="contact-developer">
+                        <span>Contact Developer</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    <div class="setting-item" id="logout-btn">
+                        <span style="color: var(--error-color);">Logout</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="app-nav">
+            <div class="nav-item active" data-view="chats">
+                <i class="fas fa-comment"></i>
+                <div>Chats</div>
+            </div>
+            <div class="nav-item" data-view="ai-chat">
+                <i class="fas fa-robot"></i>
+                <div>IsaGPT</div>
+            </div>
+            <div class="nav-item" data-view="add-friends">
+                <i class="fas fa-user-plus"></i>
+                <div>Add Friends</div>
+            </div>
+            <div class="nav-item" data-view="settings">
+                <i class="fas fa-cog"></i>
+                <div>Settings</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Supabase script first -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/script.js"></script>
+
+    <script>
+    // Add this to your existing script.js or include it here
+    document.addEventListener('DOMContentLoaded', function() {
+        // Contact Developer functionality
+        const contactDeveloperBtn = document.getElementById('contact-developer');
+        const contactDeveloperModal = document.getElementById('contact-developer-modal');
+        const closeContactDeveloperBtn = document.getElementById('close-contact-developer');
+        const whatsappBtn = document.getElementById('whatsapp-btn');
+        const emailBtn = document.getElementById('email-btn');
+
+        // Show contact developer modal
+        if (contactDeveloperBtn) {
+            contactDeveloperBtn.addEventListener('click', function() {
+                contactDeveloperModal.style.display = 'flex';
+            });
+        }
+
+        // Close contact developer modal
+        if (closeContactDeveloperBtn) {
+            closeContactDeveloperBtn.addEventListener('click', function() {
+                contactDeveloperModal.style.display = 'none';
+            });
+        }
+
+        // Close modal when clicking outside
+        contactDeveloperModal.addEventListener('click', function(e) {
+            if (e.target === contactDeveloperModal) {
+                contactDeveloperModal.style.display = 'none';
+            }
+        });
+
+        // WhatsApp button functionality
+        if (whatsappBtn) {
+            whatsappBtn.addEventListener('click', function() {
+                const phoneNumber = '08034617218';
+                const whatsappUrl = `https://wa.me/${phoneNumber}`;
+                window.open(whatsappUrl, '_blank');
+            });
+        }
+
+        // Email button functionality
+        if (emailBtn) {
+            emailBtn.addEventListener('click', function() {
+                const email = 'tunixcompanyyoung@gmail.com';
+                const subject = 'Inquiry about IsaHub App';
+                const body = 'Hello, I would like to contact you regarding...';
+                const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                window.location.href = mailtoUrl;
+            });
+        }
+
+        // Also add hover effects for buttons
+        const contactButtons = document.querySelectorAll('.contact-btn');
+        contactButtons.forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+                this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.2)';
+            });
+            
+            btn.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = 'none';
+            });
+        });
+    });
+
+    // Existing security scripts remain unchanged
+    document.addEventListener('keydown', function (e) {
+        // F12
+        if (e.key === 'F12') {
+            e.preventDefault();
+            return false;
+        }
+
+        // Ctrl+Shift+I / J / C
+        if (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key)) {
+            e.preventDefault();
+            return false;
+        }
+
+        // Ctrl+U (View Source)
+        if (e.ctrlKey && e.key === 'u') {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+    });
+
+    setInterval(() => {
+        const threshold = 160;
+        if (
+            window.outerWidth - window.innerWidth > threshold ||
+            window.outerHeight - window.innerHeight > threshold
+        ) {
+            document.body.innerHTML = '';
+            alert('Developer tools detected!');
+            location.reload();
+        }
+    }, 1000);
+    </script>
+</body>
+</html>
