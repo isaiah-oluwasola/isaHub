@@ -2460,7 +2460,52 @@ body.dark-mode .contact-info p {
 
 
 
+/* Make the signup screen scrollable */
+#signup-screen .auth-container {
+    height: auto;
+    min-height: 100vh;
+    padding: 1rem 2rem;
+    justify-content: flex-start;
+    overflow-y: auto;
+}
 
+/* Ensure the container fits all content */
+#signup-screen .auth-container > * {
+    width: 100%;
+}
+
+/* Add scrollbar styling for signup */
+#signup-screen {
+    overflow-y: auto;
+}
+
+/* Make the auth container scrollable on mobile */
+@media (max-width: 768px) {
+    #signup-screen .auth-container {
+        padding: 1rem;
+        min-height: 100%;
+    }
+}
+
+/* Adjust the signup form spacing */
+#signup-form {
+    margin-top: 1rem;
+}
+
+/* Profile picture upload adjustments */
+.profile-picture-upload {
+    margin: 1rem 0;
+}
+
+/* Terms checkbox spacing */
+.terms-checkbox {
+    margin: 1.5rem 0;
+}
+
+/* Ensure inputs don't overflow on mobile */
+.input-group input {
+    max-width: 100%;
+}
 
 
 
